@@ -32,11 +32,11 @@
 
       1. VSCode插件安装
 
-         VSCode扩展中安装`Espressif IDF`，安装完成后在VSCode菜单`View（查看）`中单击`Command Palette（命令面板）`，在弹出框中输入`configure esp-idf extension`，选择`ESP-IDF: Configure ESP-IDF extension`选项。
+         VSCode扩展中安装`Espressif IDF`，安装完成后,单击左侧出现的`ESP-IDF Explorer`图标。
 
-         在跳转的新窗口中，选择`Express`设置选项，可快速全面安装。ESP-IDF版本选择可选择旧版本如v4.1；选择先前安装的python3；安装位置均任选。
+         新窗口将自动跳转至`ESP-IDF Setup`，选择`EXPRESS`设置选项，可快速全面安装。ESP-IDF版本选择，如需使用ESP32-S3，须选择v4.4及以上版本。本流程编写时使用v4.1.1(release version)。
 
-         等待安装完成即可，左侧将出现ESP-IDF Explorer。
+         单击右下角`Install`等待安装完成即可。
 
       2. 手动安装
 
