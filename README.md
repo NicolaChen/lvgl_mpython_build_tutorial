@@ -32,7 +32,7 @@
 
          VSCode扩展中安装`Espressif IDF`，安装完成后,单击左侧出现的`ESP-IDF Explorer`图标。
 
-         新窗口将自动跳转至`ESP-IDF Setup`，选择`EXPRESS`设置选项，可快速全面安装。ESP-IDF版本选择，如需使用ESP32-S3，须选择v4.4及以上版本。本流程编写时使用v4.1.1(release version)。
+         新窗口将自动跳转至`ESP-IDF Setup`，选择`EXPRESS`设置选项，可快速全面安装。ESP-IDF版本选择，如需使用ESP32-S3，须选择v4.4及以上版本。本流程编写时使用v4.4.1(release version)。
 
          单击右下角`Install`等待安装完成即可。
 
@@ -71,6 +71,22 @@
       4. 针对触摸屏调整库文件参数
 
       5. 编译并部署ESP32所用固件
+   
+   4. 可能遇到的问题
+   
+      1. 主机（Win10）可以识别ESP32-S3（如果不能识别，前往Silicon Labs下载安装cp210x驱动），虚拟机无法识别：
+   
+         [问题解决方案来源](https://askubuntu.com/questions/1403705/dev-ttyusb0-not-present-in-ubuntu-22-04)
+   
+         操作方法：
+   
+         ```shell
+         lsusb	//找到cp2102设备，即ESP32-S3，记住其ID
+         cd /usr/lib/udev/rules.d
+         sudo vi 85-brltty.rules
+         ```
+   
+         在打开的vi编辑界面中，使用`#`注释掉ID对应的代码`ENV{PRODUCT}=="xxxx/xxxx/*", ENV{BRLTTY_BRAILLE_DRIVER}="bm", GOTO="brltty_usb_run"`，保存后重启虚拟机即可。
 
 
 #### 2.2 MacOs
