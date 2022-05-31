@@ -8,8 +8,6 @@
 
 ### 2.1 Ubuntu
 
-#### 2.1.1 准备工作
-
 1. 获取lv-micropython仓库，并更新子模块
 
    ```shell
@@ -73,6 +71,62 @@
       4. 针对触摸屏调整库文件参数
 
       5. 编译并部署ESP32所用固件
+
+
+#### 2.2 MacOs
+
+1. 获取lv-micropython仓库，并更新子模块
+
+   ```shell
+   git clone https://github.com/lvgl/lv_micropython.git
+   cd lv_micropython
+   git submodule update --init --recursive lib/lv_bindings
+   ```
+
+2. 获取ESP-IDF
+
+   此条与Ubuntu下安装流程略有不同，需注意。
+
+   1. 获取esp-idf仓库
+
+      ```shell
+      git clone -b v4.4.1 --recursive https://github.com/espressif/esp-idf.git
+      ```
+
+   2. 执行脚本，安装工具链
+
+      ```shell
+      cd esp-idf
+      ./install.sh
+      source export.sh
+      ```
+
+      > 执行第二步`./install.sh`时，如有如下报错：
+      >
+      > ```
+      > WARNING: Download failure <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:997)>
+      > ```
+      >
+      > 编辑文件`esp-idf/tools/idf_tools.py`，添加代码：
+      >
+      > ```python
+      > import ssl
+      > ssl._create_default_https_context = ssl._create_unverified_context
+      > ```
+      >
+      > 保存后再执行`./install.sh`即可。
+
+      > 执行第三部时，如遇到python相关报错，原因为需要使用python3进行编译，尝试将python3软链接至python，或修改`esp-idf/export.sh`文件中L97~L99：
+      >
+      > ```shell
+      > __verbose "Using Python interpreter in $(which python3)"
+      > __verbose "Checking if Python packages are up to date..."
+      > python3 "${IDF_PATH}/tools/check_python_dependencies.py" || return 1
+      > ```
+   
+   3. 构建固件并部署烧录
+   
+      
 
 ## 3. 关于TFT-LCD触摸显示屏选择
 
