@@ -24,27 +24,33 @@
       sudo apt-get install git wget flex bison gperf python3 python3-pip python3-setuptools cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
       ```
 
-   2. 获取ESP-IDF
+   2. 获取ESP-IDF，编译获得终端`idf.py`工具
 
       此条分为两种方式，一为VSCode官方插件安装，二为手动安装。
 
-      1. VSCode插件安装
+      - VSCode插件安装
 
-         VSCode扩展中安装`Espressif IDF`，安装完成后,单击左侧出现的`ESP-IDF Explorer`图标。
+        VSCode扩展中安装`Espressif IDF`，安装完成后,单击左侧出现的`ESP-IDF Explorer`图标。
 
-         新窗口将自动跳转至`ESP-IDF Setup`，选择`EXPRESS`设置选项，可快速全面安装。ESP-IDF版本选择，如需使用ESP32-S3，须选择v4.4及以上版本。本流程编写时使用v4.4.1(release version)。
+        新窗口将自动跳转至`ESP-IDF Setup`，选择`EXPRESS`设置选项，可快速全面安装。ESP-IDF版本选择，如需使用ESP32-S3，须选择v4.4及以上版本。本流程编写时使用v4.4.1(release version)。
 
-         单击右下角`Install`等待安装完成即可。
+        单击右下角`Install`等待安装完成即可。
 
-      2. 手动安装
+      - 手动安装
 
-         待续
+        [官方教程](https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/get-started/linux-macos-setup.html)
+
+        亦可参考下文MacOS下获取ESP-IDF流程。
+
+      IDE安装和手动安装差别仅在于，IDE安装稳定且速度快，不至于出现git clone失败问题。
+
+      以上方式任选其一后，执行在esp/esp-idf目录下，终端执行`./install.sh`，检查环境完整性；通过后，终端执行`source export.sh`，使此终端窗口可以使用`idf.py`工具（注意，后续步骤都需在此终端窗口中完成，若在新窗口中，需再次执行上述`source export.sh`步骤）。
 
    3. 编译并部署固件(可参考<https://www.cnblogs.com/Wind-stormger/p/15557579.html>)
-
+   
       1. 编译mpy-cross
 
-         在lv_micorpython文件夹目录下，终端运行：
+         在目录`lv_micorpython`下，终端运行：
 
          ```shell
          make -C mpy-cross
@@ -55,22 +61,30 @@
       2. 自定义ESP32模板（非必要）
 
          打开目录`lv_micorpython/ports/esp32/boards`，针对合适的开发板文件夹，直接编辑或编辑其副本，如NodeMCU-32S(ESP32s)使用`GENERIC`，ESP32-S3_DevKitC-1使用`GENERIC_S3`。
-
+   
       3. 自定义编译配置（非必要）
-
+   
          在`lv_micopython/ports/esp32`目录下，以编辑文件`Makefile`，以实现编译部署配置自定义。以下为示例：
 
          ```
-         BOARD ?= ESP32-S3
+         BOARD ?= GENERIC_S3
          PORT ?= /dev/ttyUSB0
          BAUD ?= 115200
          ```
-
+   
          此步骤非必要，可在后续步骤4中命令行中添加命令项实现同样效果。
-
+   
       4. 针对触摸屏调整库文件参数
-
+   
       5. 编译并部署ESP32所用固件
+   
+         在目录`lv_micropython`下，终端执行：
+   
+         ```shell
+         make -C ports/esp32/ LV_CFLAGS="-DLV_COLOR_DEPTH=32" BOARD=GENERIC_S3 PORT=/dev/ttyUSB0 BAUD=115200 deploy
+         ```
+   
+         问题：ESP-IDF版本v4.4.1下执行此操作会报错退出，暂无解决方案！
    
    4. 可能遇到的问题
    
@@ -87,9 +101,13 @@
          ```
    
          在打开的vi编辑界面中，使用`#`注释掉ID对应的代码`ENV{PRODUCT}=="xxxx/xxxx/*", ENV{BRLTTY_BRAILLE_DRIVER}="bm", GOTO="brltty_usb_run"`，保存后重启虚拟机即可。
+      
+      2. 编译部署固件时，进度接近`1157`时报错退出，ESP-IDF版本v4.4.1（MacOS下也有此错误）：
+      
+         暂无解决方法！
 
 
-#### 2.2 MacOs
+#### 2.2 MacOS
 
 1. 获取lv-micropython仓库，并更新子模块
 
